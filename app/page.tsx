@@ -371,7 +371,7 @@ export default function Home() {
               Perfect For
             </h2>
             <p className="text-xl text-white/70 max-w-2xl mx-auto">
-              Whether you're a creator, marketer, or analyst, Shorts Spy helps you make smarter decisions
+              Whether you&apos;re a creator, marketer, or analyst, Shorts Spy helps you make smarter decisions
             </p>
           </ScrollReveal>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

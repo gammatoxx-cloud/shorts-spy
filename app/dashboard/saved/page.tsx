@@ -240,7 +240,7 @@ export default function SavedContentPage() {
         <div className="mb-12">
           <h1 className="text-4xl font-bold mb-1 text-white bg-gradient-to-r from-white to-white/90 bg-clip-text text-transparent">Saved Content</h1>
           <p className="text-white/60 text-sm">
-            Videos you've saved for later viewing
+            Videos you&apos;ve saved for later viewing
           </p>
         </div>
 
