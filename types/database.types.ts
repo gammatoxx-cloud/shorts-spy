@@ -19,7 +19,7 @@ export type ScrapeStatus = "pending" | "running" | "completed" | "failed";
 export type SubscriptionTier = "free" | "paid";
 export type SubscriptionStatus = "active" | "canceled" | "past_due";
 export type RateLimitActionType = "scrape" | "refresh";
-export type Platform = "tiktok" | "instagram";
+export type Platform = "tiktok" | "instagram" | "youtube";
 
 export interface Database {
   public: {
@@ -225,25 +225,81 @@ export interface Database {
           id: string;
           user_id: string;
           video_id: string;
-          platform: "tiktok" | "instagram";
+          platform: "tiktok" | "instagram" | "youtube";
           created_at: string;
         };
         Insert: {
           id?: string;
           user_id: string;
           video_id: string;
-          platform: "tiktok" | "instagram";
+          platform: "tiktok" | "instagram" | "youtube";
           created_at?: string;
         };
         Update: {
           id?: string;
           user_id?: string;
           video_id?: string;
-          platform?: "tiktok" | "instagram";
+          platform?: "tiktok" | "instagram" | "youtube";
           created_at?: string;
         };
       };
       instagram_reels: {
+        Row: {
+          id: string;
+          profile_id: string;
+          scrape_id: string;
+          video_id: string;
+          video_url: string;
+          description: string | null;
+          thumbnail_url: string | null;
+          views: number;
+          likes: number;
+          comments: number;
+          shares: number | null;
+          engagement_rate: number;
+          posted_at: string | null;
+          duration_seconds: number | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          profile_id: string;
+          scrape_id: string;
+          video_id: string;
+          video_url: string;
+          description?: string | null;
+          thumbnail_url?: string | null;
+          views?: number;
+          likes?: number;
+          comments?: number;
+          shares?: number | null;
+          engagement_rate?: number;
+          posted_at?: string | null;
+          duration_seconds?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          profile_id?: string;
+          scrape_id?: string;
+          video_id?: string;
+          video_url?: string;
+          description?: string | null;
+          thumbnail_url?: string | null;
+          views?: number;
+          likes?: number;
+          comments?: number;
+          shares?: number | null;
+          engagement_rate?: number;
+          posted_at?: string | null;
+          duration_seconds?: number | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
+      youtube_shorts: {
         Row: {
           id: string;
           profile_id: string;

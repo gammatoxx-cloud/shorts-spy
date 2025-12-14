@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 interface LoadingProgressCardProps {
   message: string;
-  platform?: "tiktok" | "instagram";
+  platform?: "tiktok" | "instagram" | "youtube";
 }
 
 type ProgressStep = {
@@ -128,7 +128,9 @@ export default function LoadingProgressCard({ message, platform = "tiktok" }: Lo
           </div>
           <div className="flex-1">
             <h3 className="text-xl font-semibold text-white mb-1">
-              {platform === "instagram" ? "Analyzing Instagram Profile" : "Analyzing TikTok Profile"}
+              {platform === "instagram" ? "Analyzing Instagram Profile" :
+               platform === "youtube" ? "Analyzing YouTube Channel" :
+               "Analyzing TikTok Profile"}
             </h3>
             <p className="text-sm text-teal-400">{message}</p>
           </div>

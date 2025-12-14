@@ -25,3 +25,8 @@ export const TIKTOK_SCRAPER_ACTOR_ID = "GdWCkxBtKWOsKjdch";
  */
 export const INSTAGRAM_SCRAPER_ACTOR_ID = "xMc5Ga1oCONPmWJIa";
 
+/**
+ * Apify actor ID for YouTube Shorts scraper
+ */
+export const YOUTUBE_SCRAPER_ACTOR_ID = "streamers/youtube-shorts-scraper";
+

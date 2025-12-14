@@ -25,7 +25,7 @@ interface Video {
 
 interface VideoTableProps {
   videos: Video[];
-  platform?: "tiktok" | "instagram";
+  platform?: "tiktok" | "instagram" | "youtube";
 }
 
 export default function VideoTable({ videos, platform = "tiktok" }: VideoTableProps) {

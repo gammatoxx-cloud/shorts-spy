@@ -36,9 +36,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (platform !== "tiktok" && platform !== "instagram") {
+    if (platform !== "tiktok" && platform !== "instagram" && platform !== "youtube") {
       return NextResponse.json(
-        { error: "platform must be 'tiktok' or 'instagram'" },
+        { error: "platform must be 'tiktok', 'instagram', or 'youtube'" },
         { status: 400 }
       );
     }
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     // Try to save the video (saveVideo will handle errors)
     try {
       console.log("Attempting to save video:", { user_id: user.id, video_id, platform });
-      const savedVideo = await saveVideo(user.id, video_id, platform as "tiktok" | "instagram");
+      const savedVideo = await saveVideo(user.id, video_id, platform as "tiktok" | "instagram" | "youtube");
       console.log("Video saved successfully:", savedVideo);
       return NextResponse.json({
         success: true,
@@ -126,7 +126,11 @@ export async function GET(request: NextRequest) {
     // If video_ids param is provided, return saved status for those videos
     if (videoIdsParam) {
       const videoIds = videoIdsParam.split(",").filter((id) => id.trim());
-      const platform = (platformParam === "instagram" ? "instagram" : "tiktok") as "tiktok" | "instagram";
+      const platform = (
+        platformParam === "instagram" ? "instagram" :
+        platformParam === "youtube" ? "youtube" :
+        "tiktok"
+      ) as "tiktok" | "instagram" | "youtube";
       const savedStatus = await getSavedStatusForVideos(user.id, videoIds, platform);
       return NextResponse.json({ saved_status: savedStatus });
     }
@@ -179,14 +183,14 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    if (platform !== "tiktok" && platform !== "instagram") {
+    if (platform !== "tiktok" && platform !== "instagram" && platform !== "youtube") {
       return NextResponse.json(
-        { error: "platform must be 'tiktok' or 'instagram'" },
+        { error: "platform must be 'tiktok', 'instagram', or 'youtube'" },
         { status: 400 }
       );
     }
 
-    await unsaveVideo(user.id, video_id, platform as "tiktok" | "instagram");
+    await unsaveVideo(user.id, video_id, platform as "tiktok" | "instagram" | "youtube");
 
     return NextResponse.json({
       success: true,

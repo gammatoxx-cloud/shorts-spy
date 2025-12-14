@@ -8,6 +8,7 @@ export * from "./profiles";
 export * from "./scrapes";
 export * from "./videos";
 export * from "./instagram-reels";
+export * from "./youtube-shorts";
 export * from "./subscriptions";
 export * from "./rate-limits";
 

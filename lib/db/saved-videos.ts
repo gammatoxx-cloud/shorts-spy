@@ -19,7 +19,7 @@ export interface SavedVideoWithDetails {
   duration_seconds: number | null;
   created_at: string;
   saved_at: string;
-  platform: "tiktok" | "instagram";
+  platform: "tiktok" | "instagram" | "youtube";
   creator: {
     id: string;
     username: string;
@@ -34,7 +34,7 @@ export interface SavedVideoWithDetails {
 export async function saveVideo(
   userId: string,
   videoId: string,
-  platform: "tiktok" | "instagram" = "tiktok"
+  platform: "tiktok" | "instagram" | "youtube" = "tiktok"
 ): Promise<SavedVideo> {
   const supabase = await createClient();
 
@@ -93,12 +93,15 @@ export async function getSavedVideos(
     return [];
   }
 
-  // Separate TikTok and Instagram video IDs
+  // Separate TikTok, Instagram, and YouTube video IDs
   const tiktokVideoIds = savedVideos
     .filter((sv) => sv.platform === "tiktok")
     .map((sv) => sv.video_id);
   const instagramVideoIds = savedVideos
     .filter((sv) => sv.platform === "instagram")
+    .map((sv) => sv.video_id);
+  const youtubeVideoIds = savedVideos
+    .filter((sv) => sv.platform === "youtube")
     .map((sv) => sv.video_id);
 
   const allVideos: SavedVideoWithDetails[] = [];
@@ -251,6 +254,78 @@ export async function getSavedVideos(
     }
   }
 
+  // Fetch YouTube Shorts if any
+  if (youtubeVideoIds.length > 0) {
+    const { data: youtubeShorts, error: youtubeError } = await supabase
+      .from("youtube_shorts")
+      .select(
+        `
+        id,
+        video_id,
+        video_url,
+        description,
+        thumbnail_url,
+        views,
+        likes,
+        comments,
+        shares,
+        engagement_rate,
+        posted_at,
+        duration_seconds,
+        created_at,
+        profile_id,
+        profiles (
+          id,
+          username,
+          display_name,
+          avatar_url
+        )
+      `
+      )
+      .in("video_id", youtubeVideoIds);
+
+    if (youtubeError) {
+      console.error("Error fetching YouTube Shorts:", youtubeError);
+    } else if (youtubeShorts) {
+      // Create a map of saved_videos by video_id for quick lookup
+      const savedVideosMap = new Map(
+        savedVideos
+          .filter((sv) => sv.platform === "youtube")
+          .map((sv) => [sv.video_id, sv])
+      );
+
+      youtubeShorts.forEach((video: any) => {
+        const savedVideo = savedVideosMap.get(video.video_id);
+        if (savedVideo) {
+          const profile = video.profiles as any;
+          allVideos.push({
+            id: video.id,
+            video_id: video.video_id,
+            video_url: video.video_url,
+            description: video.description,
+            thumbnail_url: video.thumbnail_url,
+            views: video.views,
+            likes: video.likes,
+            comments: video.comments,
+            shares: video.shares,
+            engagement_rate: video.engagement_rate,
+            posted_at: video.posted_at,
+            duration_seconds: video.duration_seconds,
+            created_at: video.created_at,
+            saved_at: savedVideo.created_at,
+            platform: "youtube" as const,
+            creator: {
+              id: profile?.id || "",
+              username: profile?.username || "",
+              display_name: profile?.display_name || null,
+              avatar_url: profile?.avatar_url || null,
+            },
+          });
+        }
+      });
+    }
+  }
+
   console.log(`Returning ${allVideos.length} total saved videos with details`);
 
   // Sort by saved_at (most recent first)
@@ -265,7 +340,7 @@ export async function getSavedVideos(
 export async function isVideoSaved(
   userId: string,
   videoId: string,
-  platform: "tiktok" | "instagram" = "tiktok"
+  platform: "tiktok" | "instagram" | "youtube" = "tiktok"
 ): Promise<boolean> {
   const supabase = await createClient();
 
@@ -294,7 +369,7 @@ export async function isVideoSaved(
 export async function unsaveVideo(
   userId: string,
   videoId: string,
-  platform: "tiktok" | "instagram" = "tiktok"
+  platform: "tiktok" | "instagram" | "youtube" = "tiktok"
 ): Promise<void> {
   const supabase = await createClient();
 
@@ -314,7 +389,7 @@ export async function unsaveVideo(
 export async function getSavedStatusForVideos(
   userId: string,
   videoIds: string[],
-  platform: "tiktok" | "instagram" = "tiktok"
+  platform: "tiktok" | "instagram" | "youtube" = "tiktok"
 ): Promise<Record<string, boolean>> {
   if (videoIds.length === 0) return {};
 

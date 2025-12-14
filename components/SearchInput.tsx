@@ -6,9 +6,9 @@ interface SearchInputProps {
   onSearch: (username: string, videoCount: number) => Promise<void>;
   isLoading?: boolean;
   error?: string | null;
-  platform?: "tiktok" | "instagram";
-  selectedPlatform?: "tiktok" | "instagram";
-  onPlatformChange?: (platform: "tiktok" | "instagram") => void;
+  platform?: "tiktok" | "instagram" | "youtube";
+  selectedPlatform?: "tiktok" | "instagram" | "youtube";
+  onPlatformChange?: (platform: "tiktok" | "instagram" | "youtube") => void;
 }
 
 export default function SearchInput({
@@ -101,6 +101,21 @@ export default function SearchInput({
               </svg>
               <span>Instagram Reels</span>
             </button>
+            <button
+              type="button"
+              onClick={() => onPlatformChange("youtube")}
+              disabled={isLoading}
+              className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-medium transition-all duration-200 ${
+                platform === "youtube"
+                  ? "bg-red-500/20 border border-red-500/50 text-red-400"
+                  : "bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white"
+              } disabled:opacity-50 disabled:cursor-not-allowed`}
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+              <span>YouTube Shorts</span>
+            </button>
           </div>
         </div>
       )}
@@ -113,12 +128,16 @@ export default function SearchInput({
                 <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" strokeWidth="2" stroke="currentColor" fill="none"/>
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" strokeWidth="2" stroke="currentColor"/>
               </svg>
+            ) : platform === "youtube" ? (
+              <svg className="w-4 h-4 text-red-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
             ) : (
               <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
             )}
-            Username
+            {platform === "youtube" ? "Channel Name" : "Username"}
           </label>
           <div className="relative">
             <div className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40">
@@ -149,7 +168,7 @@ export default function SearchInput({
             <svg className="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
-            {platform === "instagram" ? "Reels to Analyze" : "Videos to Analyze"}
+            {platform === "instagram" ? "Reels to Analyze" : platform === "youtube" ? "Shorts to Analyze" : "Videos to Analyze"}
           </label>
           <input
             id="videoCount"

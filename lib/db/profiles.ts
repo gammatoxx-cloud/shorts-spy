@@ -10,7 +10,7 @@ type ProfileUpdate = Database["public"]["Tables"]["profiles"]["Update"];
  */
 export async function getProfileByUsername(
   username: string,
-  platform: "tiktok" | "instagram" = "tiktok"
+  platform: "tiktok" | "instagram" | "youtube" = "tiktok"
 ): Promise<Profile | null> {
   const supabase = await createClient();
   const { data, error } = await supabase
